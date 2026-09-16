@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -75,8 +77,18 @@ public class MainActivity extends Activity {
         root.setBackgroundColor(SURFACE);
         root.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
             @Override public WindowInsets onApplyWindowInsets(View view, WindowInsets insets) {
-                view.setPadding(dp(22), dp(10) + insets.getSystemWindowInsetTop(),
-                        dp(22), dp(24) + insets.getSystemWindowInsetBottom());
+                int topInset;
+                int bottomInset;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
+                    topInset = bars.top;
+                    bottomInset = bars.bottom;
+                } else {
+                    topInset = insets.getSystemWindowInsetTop();
+                    bottomInset = insets.getSystemWindowInsetBottom();
+                }
+                view.setPadding(dp(22), dp(10) + topInset,
+                        dp(22), dp(24) + bottomInset);
                 return insets;
             }
         });
@@ -85,6 +97,19 @@ public class MainActivity extends Activity {
         today.setId(View.generateViewId());
         today.setTag("today");
         root.addView(today);
+
+        FrameLayout workSpace = new FrameLayout(this);
+        root.addView(workSpace, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
+
+        LinearLayout workArea = new LinearLayout(this);
+        workArea.setOrientation(LinearLayout.VERTICAL);
+        workArea.setGravity(Gravity.CENTER_VERTICAL);
+        FrameLayout.LayoutParams workAreaParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+        workSpace.addView(workArea, workAreaParams);
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
@@ -98,16 +123,16 @@ public class MainActivity extends Activity {
             @Override public void onClick(View v) { showHelp(); }
         });
         header.addView(help, new LinearLayout.LayoutParams(dp(52), dp(52)));
-        root.addView(header);
+        workArea.addView(header);
 
         inputLabel = text("", 14, MUTED);
-        root.addView(inputLabel);
+        workArea.addView(inputLabel);
         entry = new EditText(this);
         entry.setTextSize(22);
         entry.setTextColor(ON_SURFACE);
         entry.setSingleLine(true);
         entry.setPadding(dp(16), dp(10), dp(16), dp(10));
-        root.addView(entry, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(60)));
+        workArea.addView(entry, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(60)));
         entry.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -119,16 +144,16 @@ public class MainActivity extends Activity {
 
         error = text("", 13, ERROR);
         error.setMinHeight(dp(30));
-        root.addView(error);
+        workArea.addView(error);
 
         resultLabel = text("", 14, MUTED);
         resultLabel.setGravity(Gravity.CENTER);
         resultLabel.setPadding(0, dp(22), 0, 0);
-        root.addView(resultLabel);
+        workArea.addView(resultLabel);
         result = text("—", 56, ON_SURFACE);
         result.setGravity(Gravity.CENTER);
         result.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        root.addView(result, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(94)));
+        workArea.addView(result, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(94)));
 
         LinearLayout actions = new LinearLayout(this);
         actions.setGravity(Gravity.CENTER);
@@ -155,7 +180,7 @@ public class MainActivity extends Activity {
         actionParams.setMargins(dp(7), 0, dp(7), 0);
         actions.addView(flip, actionParams);
         actions.addView(clear, actionParams);
-        root.addView(actions);
+        workArea.addView(actions);
 
         return root;
     }
