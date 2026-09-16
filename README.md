@@ -67,7 +67,7 @@ The current implementation applies system-bar insets and uses a small vertical a
 | `1.1` | Rebuilt with a new Android version code so update installation is reliable |
 | `1.2` | Added system-bar safe-area handling to prevent overlap with the phone status bar |
 | `1.3` | Shortened completed-entry auto-selection from 0.65 seconds to 0.45 seconds, so the next tire code can be entered sooner |
-| `1.4-experimental` | Experimental adaptive layout: the work controls center themselves in the remaining keyboard-safe area rather than moving by a fixed offset |
+| `1.4-experimental.2` | Experimental adaptive layout: the work controls center themselves in the actual keyboard-safe area supplied by Android's IME insets, rather than moving by a fixed offset |
 
 ## Development
 

@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
     private TextView result;
     private TextView error;
     private TextView today;
+    private FrameLayout workSpace;
     private boolean reverse = false;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable selectCompletedInput = new Runnable() {
@@ -89,6 +90,10 @@ public class MainActivity extends Activity {
                 }
                 view.setPadding(dp(22), dp(10) + topInset,
                         dp(22), dp(24) + bottomInset);
+                if (workSpace != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    int keyboardInset = insets.getInsets(WindowInsets.Type.ime()).bottom;
+                    workSpace.setPadding(0, 0, 0, keyboardInset);
+                }
                 return insets;
             }
         });
@@ -98,7 +103,7 @@ public class MainActivity extends Activity {
         today.setTag("today");
         root.addView(today);
 
-        FrameLayout workSpace = new FrameLayout(this);
+        workSpace = new FrameLayout(this);
         root.addView(workSpace, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1));
 
