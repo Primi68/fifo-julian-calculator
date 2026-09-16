@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
 
     private void scheduleNextEntry() {
         handler.removeCallbacks(selectCompletedInput);
-        handler.postDelayed(selectCompletedInput, 650);
+        handler.postDelayed(selectCompletedInput, 450);
     }
 
     private void showHelp() {

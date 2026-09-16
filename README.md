@@ -6,6 +6,8 @@ The app is intentionally small. It is designed for a work process where the user
 
 ## Core behavior
 
+After a valid conversion, the completed entry is automatically selected after a short 0.45-second pause. The operator can therefore type the next code immediately, or remove the whole previous entry with one Backspace press. The `×` button always clears the entry completely.
+
 ### Julian number to FIFO date
 
 | Input | Output |
