@@ -201,7 +201,9 @@ public class MainActivity extends Activity {
         modeTitle.setText(reverse ? "날짜 → 줄리안 번호" : "줄리안 번호 → 날짜");
         inputLabel.setText(reverse ? "날짜" : "줄리안 번호 또는 YYDDD 코드");
         resultLabel.setText(reverse ? "줄리안 번호" : "FIFO 라벨 날짜");
-        entry.setInputType(reverse ? InputType.TYPE_CLASS_TEXT : InputType.TYPE_CLASS_NUMBER);
+        // Both workflows are number-first: 258 and 915 are the quickest normal inputs.
+        // Separators remain accepted when pasted or entered from a hardware keyboard.
+        entry.setInputType(InputType.TYPE_CLASS_NUMBER);
         error.setText("");
         result.setText("—");
     }
